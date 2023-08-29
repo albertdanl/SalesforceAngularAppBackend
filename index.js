@@ -13,7 +13,7 @@ app.use(bodyParser.json());
 var org = nforce.createConnection({
   clientId: "3MVG9kBt168mda_95Y.3Re3isgTYvQlBLQ8fYqWmaSvnVOa877LkLz87J5siJNiZdj628Mg6TMTWJ5JUiz3L8",
   clientSecret: "BF94C6C8B6EA8E23DC09E2DF850CB6805E14945D408E24A98937EA694B1401A3",
-  redirectUri: "https://seanstack.herokuapp.com/oauth/_callback",
+  redirectUri: "https://albertdanl-dev-ed.lightning.force.com",
   apiVersion: "v37.0",
   environment: "production",
   mode: "single"
@@ -40,12 +40,44 @@ function handleError(res, reason, message, code) {
 
 //change username, password+securitytoken as per your org
 app.get("/contacts", function(req, res) {
-  org.authenticate({ username: 'a.danielqz@gmail.com.dev', password: '1706LauDan..Mg0jHj6vsxYQYnfmQYhX3dzBu'}, function(err, oauth){
+  org.authenticate({ username: 'a.danielqz@gmail.com.dev', password: /*pass*/ }, function(err, oauth){
     if(err) {
       console.log('Error: ' + err.message);
     } else {
       console.log('Access Token: ' + oauth.access_token);
       org.query({query:"select id,firstName,lastName from contact"}, function (err, resp) {
+        if(err) throw err;
+        if(resp.records && resp.records.length){
+          res.send(resp.records);
+        }
+      });
+    }
+  });
+});
+
+app.get("/Opportunities", function(req, res) {
+  org.authenticate({ username: 'a.danielqz@gmail.com.dev', password: /*pass*/ }, function(err, oauth){
+    if(err) {
+      console.log('Error: ' + err.message);
+    } else {
+      console.log('Access Token: ' + oauth.access_token);
+      org.query({query:"select id, LastModifiedDate, Name, Amount, StageName from Opportunity"}, function (err, resp) {
+        if(err) throw err;
+        if(resp.records && resp.records.length){
+          res.send(resp.records);
+        }
+      });
+    }
+  });
+});
+
+app.get("/Products", function(req, res) {
+  org.authenticate({ username: 'a.danielqz@gmail.com.dev', password: /*pass*/ }, function(err, oauth){
+    if(err) {
+      console.log('Error: ' + err.message);
+    } else {
+      console.log('Access Token: ' + oauth.access_token);
+      org.query({query:"select id, LastModifiedDate, Name, Image_Product__c from Product2"}, function (err, resp) {
         if(err) throw err;
         if(resp.records && resp.records.length){
           res.send(resp.records);
